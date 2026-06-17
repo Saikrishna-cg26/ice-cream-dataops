@@ -7,3 +7,5 @@ destination:
     version: v1
     destinationType: CogniteTimeSeries
   type: instances
+  ignoreNullFields: true
+  conflictMode: upsert
