@@ -7,9 +7,11 @@ destination:
     version: v1
     destinationType: CogniteTimeSeries
   type: instances
-  ignoreNullFields: true
-  conflictMode: upsert
-  authentication:
+ignoreNullFields: true
+isPublic: true
+conflictMode: upsert
+
+authentication:
   clientId: {{ icapi_extractors_client_id }}
   clientSecret: {{ icapi_extractors_client_secret }}
   tokenUri: {{ tokenUri }}
