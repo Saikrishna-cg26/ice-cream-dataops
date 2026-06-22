@@ -9,3 +9,9 @@ destination:
   type: instances
   ignoreNullFields: true
   conflictMode: upsert
+  authentication:
+  clientId: {{ icapi_extractors_client_id }}
+  clientSecret: {{ icapi_extractors_client_secret }}
+  tokenUri: {{ tokenUri }}
+  cdfProjectName: {{ cdfProjectName }}
+  scopes: {{ scopes }}

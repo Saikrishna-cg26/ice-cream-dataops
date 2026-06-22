@@ -1,0 +1,5 @@
+externalId: create_asset_hierarchy
+ 
+interval: '02 0 * * *'  
+isPaused: false
+ 

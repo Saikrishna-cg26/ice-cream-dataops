@@ -1,15 +1,68 @@
 workflowExternalId: wf_icapi_data_pipeline
 version: '1'
+ 
 workflowDefinition:
+  description: Run Ice Cream data pipeline tasks in sequence
+ 
   tasks:
-  - externalId: icapi_datapoints_extractor_task
-    type: function
-    parameters:
-      function:
-        externalId: icapi_datapoints_extractor
-        data: { "hours": 1 }
-    retries: 3
-    timeout: 3600
-    onFailure: abortWorkflow
-    dependsOn:
-      - externalId: contextualize_ts_assets_task
+    # Task 1
+    - externalId: wf_icapi_create_asset_hierarchy_task
+      type: function
+      parameters:
+        function:
+          externalId: create_asset_hierarchy
+          data: {}
+        isAsyncComplete: false
+      name: Create Asset Hierarchy
+      description: Creates asset hierarchy
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+ 
+    # Task 2
+    - externalId: wf_icapi_contextualize_ts_assets_task
+      type: function
+      parameters:
+        function:
+          externalId: contextualize_ts_assets
+          data: {}
+        isAsyncComplete: false
+      name: Contextualize Time Series
+      description: Link timeseries to assets
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+      dependsOn:
+        - externalId: wf_icapi_create_asset_hierarchy_task
+ 
+    # Task 3
+    - externalId: wf_icapi_datapoints_extractor_task
+      type: function
+      parameters:
+        function:
+          externalId: icapi_datapoints_extractor
+          data: { "hours": 1 }
+        isAsyncComplete: false
+      name: Extract Datapoints
+      description: Extract ICAPI datapoints
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+      dependsOn:
+        - externalId: wf_icapi_contextualize_ts_assets_task
+ 
+    # Task 4
+    - externalId: wf_icapi_oee_timeseries_task
+      type: function
+      parameters:
+        function:
+          externalId: oee_timeseries
+          data: {}
+        isAsyncComplete: false
+      name: OEE Timeseries Calculation
+      description: Calculate OEE metrics
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+      dependsOn:
+        - externalId: wf_icapi_datapoints_extractor_task
